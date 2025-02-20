@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+from geopy.geocoders import Nominatim
 
 def fetch_station_location():
     base_url = 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/'
@@ -66,8 +67,30 @@ def fetch_station_status():
     df = pd.DataFrame(stations_dic)
     return df
 
+
+def get_address_coordinates(name: str):
+    # calling the Nominatim tool
+    loc = Nominatim(user_agent="GetLoc")
+    
+    # entering the location name
+    getLoc = loc.geocode(name)
+    if getLoc is not None:
+        print('Location found ✅')
+        return getLoc.latitude, getLoc.longitude
+    else: 
+        print('Location not found ❌')
+        return None
+
+
+
 if __name__ == "__main__":
-   data_station_location = fetch_station_location() 
-   print(data_station_location.head(5))
-   data_stations_status = fetch_station_status()
-   print(data_station_location.head(5))
+
+    data_station_location = fetch_station_location() 
+    print(data_station_location.head(5))
+    data_stations_status = fetch_station_status()
+    print(data_stations_status.head(5))
+
+    #search for an adress location
+    searched_adress = '19 rue Richer, Paris'
+    coordinates = get_address_coordinates(searched_adress)
+    print(f"les coordonées de l'adresse {searched_adress} sont: {coordinates}")
