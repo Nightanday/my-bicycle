@@ -2,8 +2,6 @@
 .env
 .envrc
 .credentials
-test.py
-test2.py
-test3.py
+/FOLDER_TO_TEST_PARTS_OF_PYTHON_SCRIPTS
 test.json
 __pycache__/
