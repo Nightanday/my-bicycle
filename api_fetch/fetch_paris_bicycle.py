@@ -2,6 +2,11 @@ import requests
 import pandas as pd
 from geopy.geocoders import Nominatim
 
+"""
+To see more informations about the api :
+https://www.velib-metropole.fr/donnees-open-data-gbfs-du-service-velib-metropole
+"""
+
 def fetch_station_location():
     base_url = 'https://velib-metropole-opendata.smovengo.cloud/opendata/Velib_Metropole/'
     requested_data = 'station_information.json'
