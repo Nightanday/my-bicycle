@@ -11,8 +11,8 @@ def load_json_lyon():
     Load reponse JSON  from API with Lyon stations current status
     Return a response JSON
     """
-    base_url = "https://data.grandlyon.com/fr/datapusher/ws/rdata/jcd_jcdecaux.jcdvelov"
-    endpoint = "/all.json"
+    base_url = "https://data.grandlyon.com"
+    endpoint = "/fr/datapusher/ws/rdata/jcd_jcdecaux.jcdvelov/all.json"
     #here we use as parameters -> "maxfeatures": -1 and "start": 1 to get all the records
     params = {
         "maxfeatures": -1,
@@ -64,6 +64,7 @@ def extract_json_lyon(json_response):
 
     dic_keys = list(station_dic.keys())
 
+    print(f'🛠️ extracting Lyon JSON data...')
     stations = json_response['values']
     for station in stations:
         for key in dic_keys:

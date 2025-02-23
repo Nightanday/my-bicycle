@@ -55,7 +55,7 @@ def extract_json_paris(json_response, endpoint):
     else:
         print("❌ you must choose a location parameter 'location' or 'status'")
     
-    print(f'🛠️ extracting {endpoint} JSON data...')
+    print(f'🛠️ extracting paris {endpoint} JSON data...')
     stations = json_response['data']['stations']
  
     for station in stations:

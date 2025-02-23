@@ -12,8 +12,8 @@ def load_json_marseille():
     Return a response JSON
     """
 
-    base_url = 'https://data.ampmetropole.fr/api/explore/v2.1/catalog/datasets/gbfs-extract-station-information/exports'
-    endpoint = '/json'
+    base_url = 'https://data.ampmetropole.fr'
+    endpoint = '/api/explore/v2.1/catalog/datasets/gbfs-extract-station-information/exports/json'
     params = {
         'lang':'fr',
         'timezone':'Europe/Berlin'
@@ -51,6 +51,7 @@ def extract_json_marseille(json_response):
     }
 
     dic_keys = list(station_dic.keys())
+    print(f'🛠️ extracting Marseille JSON data...')
     stations = json_response
     for station in stations:
         for key in dic_keys:

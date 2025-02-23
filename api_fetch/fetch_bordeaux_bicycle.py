@@ -12,8 +12,8 @@ def load_json_bordeaux():
     Return a response JSON
     """
 
-    base_url = 'https://datahub.bordeaux-metropole.fr/api/explore/v2.1/catalog/datasets/ci_vcub_p/exports'
-    endpoint = '/json'
+    base_url = 'https://datahub.bordeaux-metropole.fr'
+    endpoint = '/api/explore/v2.1/catalog/datasets/ci_vcub_p/exports/json'
     params = {
         'lang':'fr',
         'timezone':'Europe/Berlin'
@@ -50,6 +50,7 @@ def extract_json_bordeaux(json_response):
     }
 
     dic_keys = list(station_dic.keys())
+    print(f'🛠️ extracting Bordeaux JSON data...')
     stations = json_response
     for station in stations:
         for key in dic_keys:
