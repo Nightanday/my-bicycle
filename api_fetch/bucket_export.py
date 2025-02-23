@@ -1,7 +1,7 @@
 import time
 import os
 import io
-from fetch_paris_bicycle import load_json_paris, extract_json_paris
+from fetch_lille_bicycle import load_json_lille, extract_json_lille
 from google.cloud import storage
 from google.cloud import bigquery
 from google.api_core.exceptions import NotFound
@@ -86,9 +86,7 @@ def load_csv_to_bigquery(
 
 if __name__ == "__main__":
 
-    location_response = load_json_paris('location')
-    status_response = load_json_paris('status')
-    location_dic = extract_json_paris(location_response, endpoint = 'location')
-    status_dic = extract_json_paris(status_response, endpoint = 'status')
-    load_csv_to_bucket(status_dic, 'test_paris_status')
-    load_csv_to_bigquery('test_paris_status')
+    location_response = load_json_lille()
+    status_dic = extract_json_lille(location_response)
+    load_csv_to_bucket(status_dic, 'test_lille_status')
+    load_csv_to_bigquery('test_lille_status')

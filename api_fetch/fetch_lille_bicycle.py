@@ -52,11 +52,13 @@ def extract_json_lille(json_response):
         for key in dic_keys:
             # some key are directly accessible while others should be accessed inside another JSON
             station_dic[key].append(station.get(key))
+    
 
     print(f'✅ Lille stations JSON data extracted')
+    
+    station_dic['id'] = station_dic['@id']
+    del station_dic['@id']
     return station_dic
-
-
 
 if __name__ == "__main__":
     json_response = load_json_lille()
