@@ -6,15 +6,31 @@ To see more informations about the api :
 https://data.grandlyon.com/portail/fr/jeux-de-donnees/stations-velo-v-metropole-lyon-disponibilites-temps-reel/info
 """
 
-def fetch_lyon_station_status():
+def load_json_lyon():
+    """
+    Load reponse JSON  from API with Lyon stations current status
+    Return a response JSON
+    """
     base_url = "https://data.grandlyon.com/fr/datapusher/ws/rdata/jcd_jcdecaux.jcdvelov"
     endpoint = "/all.json"
+    #here we use as parameters -> "maxfeatures": -1 and "start": 1 to get all the records
     params = {
         "maxfeatures": -1,
         "start": 1,
         "filename": "stations-velo-v-metropole-lyon-disponibilites-temps-reel"
     }
 
+    response = requests.get(base_url+endpoint, params=params)
+    status_code = response.status_code
+    print(f"📥 geting data from {base_url + endpoint}...")
+    print(f'status code: {status_code}')
+    return response.json()
+
+def extract_json_lyon(json_response):
+    """
+    take JSON response  for Lyon stations to extract needed fields
+    returns a dic
+    """
     station_dic = {
         'address': [],
         "address2": [],
@@ -47,11 +63,8 @@ def fetch_lyon_station_status():
     }
 
     dic_keys = list(station_dic.keys())
-    response = requests.get(base_url+endpoint, params=params)
-    status_code = response.status_code
-    print(f'\n🚲 Fetching Lyon stations status 🚲 -> status code: {status_code}\n')
-    stations_json = response.json()
-    stations = stations_json['values']
+
+    stations = json_response['values']
     for station in stations:
         for key in dic_keys:
             # some key are directly accessible while others should be accessed inside another JSON
@@ -63,12 +76,11 @@ def fetch_lyon_station_status():
                     sub_json = sub_json.get('availabilities')
                 station_dic[key].append(sub_json.get(key))
 
-    df = pd.DataFrame(station_dic)
-    return df
-
+    print(f'✅ Lyon stations JSON data extracted')
+    return station_dic
 
 if __name__ == "__main__":
-    df = fetch_lyon_station_status()
-    print(df)
-
+    response_json= load_json_lyon()
+    lyon_dic = extract_json_lyon(response_json)
+    print(len(lyon_dic['stands']))
 
