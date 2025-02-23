@@ -1,6 +1,4 @@
 import requests
-import pandas as pd
-from geopy.geocoders import Nominatim
 
 """
 To see more informations about the api :

@@ -1,5 +1,4 @@
 import requests
-import pandas as pd 
 
 """
 To see more informations about the api :
