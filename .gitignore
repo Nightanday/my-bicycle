@@ -1,7 +1,6 @@
-/env
 .env
 .envrc
-.credentials
+/.credentials
 /FOLDER_TO_TEST_PARTS_OF_PYTHON_SCRIPTS
 test.json
 __pycache__/
