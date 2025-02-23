@@ -4,3 +4,4 @@
 /FOLDER_TO_TEST_PARTS_OF_PYTHON_SCRIPTS
 test.json
 __pycache__/
+/__pycache__
