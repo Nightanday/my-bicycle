@@ -1,0 +1,38 @@
+version: 2
+
+sources:
+  - name: marseille_source
+    description: clone of Bigquery Marseille stations avaibility tables
+    database: fleet-petal-448410-u6
+    schema: marseille_ex_datas
+    tables:
+      - name: marseille_all_tables
+        description: "Combined view of all Marseille tables in the dataset."
+  - name: paris_source
+    description: clone of Bigquery Paris stations avaibility tables
+    database: fleet-petal-448410-u6
+    schema: paris_ex_datas
+    tables:
+      - name: paris_all_tables
+        description: "Combined view of all Paris tables in the dataset."
+  - name: lille_source
+    description: clone of Bigquery Lille stations avaibility tables
+    database: fleet-petal-448410-u6
+    schema: lille_ex_datas
+    tables:
+      - name: lille_all_tables
+        description: "Combined view of all Lille tables in the dataset."
+  - name: bordeaux_source
+    description: clone of Bigquery Bordeaux stations avaibility tables
+    database: fleet-petal-448410-u6
+    schema: bordeaux_ex_datas
+    tables:
+      - name: bordeaux_all_tables
+        description: "Combined view of all Bordeaux tables in the dataset."
+  - name: lyon_source
+    description: clone of Bigquery Lyon stations avaibility tables
+    database: fleet-petal-448410-u6
+    schema: lyon_ex_datas
+    tables:
+      - name: lyon_all_tables
+        description: "Combined view of all Lyon tables in the dataset."
