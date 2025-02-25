@@ -5,7 +5,7 @@
 test.json
 __pycache__/
 /__pycache__
-
+/logs
 examples.py
 .vscode
-.python-version
+api_fetch/.python-version
