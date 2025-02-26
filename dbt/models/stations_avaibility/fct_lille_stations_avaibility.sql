@@ -6,7 +6,7 @@ with lille_stations as (
 
 final as (
     select
-        station_id
+        station_id,
         m_bikes_count,
         null as e_bikes_count,
         m_bikes_count as bikes_count,
