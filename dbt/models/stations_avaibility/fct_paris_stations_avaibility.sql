@@ -7,7 +7,7 @@ with paris_stations as (
 final as (
     select
         station_id,
-        m_bikes_count+e_bikes_count as bikes_count
+        m_bikes_count+e_bikes_count as bikes_count,
         m_bikes_count,
         e_bikes_count,
         available_docks_count,
