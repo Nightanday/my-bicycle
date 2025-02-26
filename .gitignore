@@ -5,5 +5,11 @@
 test.json
 __pycache__/
 /__pycache__
-
+/logs
+logs/
 examples.py
+.vscode
+api_fetch/.python-version
+target/
+dbt_packages/
+
