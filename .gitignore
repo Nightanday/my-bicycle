@@ -5,3 +5,5 @@
 test.json
 __pycache__/
 /__pycache__
+/logs/
+/dags/europe-west9-dev-composer-e-aeaa3dd5-bucket/
