@@ -12,9 +12,10 @@ final as (
         etat as state,
         nbplaces as available_docks_count,
         nbvelos as bikes_count,
-        nbelec e_bikes_count,
+        nbelec as e_bikes_count,
         nbclassiq as m_bikes_count,
         code_commune as city_code,
+        mdate as last_reported_at,
         GCS_loaded_at
     from {{source('bordeaux_source', 'bordeaux_all_tables')}}
 )

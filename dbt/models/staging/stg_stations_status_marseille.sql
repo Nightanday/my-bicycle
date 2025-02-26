@@ -15,6 +15,7 @@ final as (
         cast(is_returning as bool) as is_returning,
         lon,
         lat,
+        last_reported_tr as last_reported_at,
         GCS_loaded_at
     from {{source('marseille_source', 'marseille_all_tables')}}
 )

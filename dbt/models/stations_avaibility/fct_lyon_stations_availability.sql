@@ -7,11 +7,10 @@ with lyon_stations as (
 final as (
     select
         station_id,
-        available_docks_count,
-        bikes_count,
-        e_bikes_count,
         m_bikes_count,
-        total_docks_count,
+        e_bikes_count,
+        bikes_count,
+        available_docks_count,
         last_reported_at,
         GCS_loaded_at
     from 

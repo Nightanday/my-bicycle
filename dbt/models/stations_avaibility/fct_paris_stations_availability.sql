@@ -7,13 +7,10 @@ with paris_stations as (
 final as (
     select
         station_id,
-        m_bikes_count+e_bikes_count as bikes_count,
         m_bikes_count,
         e_bikes_count,
+        m_bikes_count+e_bikes_count as bikes_count,
         available_docks_count,
-        is_installed,
-        is_renting,
-        is_returning,
         last_reported_at,
         GCS_loaded_at
     from 
