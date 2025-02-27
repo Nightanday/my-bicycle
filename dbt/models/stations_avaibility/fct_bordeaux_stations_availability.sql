@@ -6,6 +6,7 @@ with bordeaux_stations as (
 
 final as (
     select
+        station_fr_id,
         station_id,
         m_bikes_count,
         e_bikes_count,

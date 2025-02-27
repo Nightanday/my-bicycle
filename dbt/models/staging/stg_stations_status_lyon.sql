@@ -1,11 +1,22 @@
+{{
+ config(
+   materialized = 'incremental',
+   incremental_strategy = 'insert_overwrite',
+   partition_by = {
+     'field': 'GCS_loaded_at', 
+     'data_type': 'timestamp',
+     'granularity': 'day'
+   }
+ )
+}}
 
 with 
 
 final as (
     select
-        gid as station_id,
+        md5('lyon' || cast(gid as string)) as station_fr_id,
+        cast(gid as string) as station_id,
         address,
-        address2,
         address_jcd,
         availability as avaibility,
         availabilitycode as availability_code,
@@ -20,7 +31,12 @@ final as (
         mechanicalBikes as m_bikes_count,
         last_update as last_reported_at,
         GCS_loaded_at
-    from {{source('lyon_source', 'lyon_all_tables')}}
+    from {{source('lyon_source', 'raw_view_lyon')}}
+    {% if is_incremental() %}
+    -- this filter will only be applied on an incremental run
+    -- (uses >= to include records arriving later on the same day as the last run of this model)
+    where GCS_loaded_at >= (select coalesce(max(GCS_loaded_at), '1900-01-01') from {{ this }})
+    {% endif %}
 )
 
 select 

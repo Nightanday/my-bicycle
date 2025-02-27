@@ -1,9 +1,21 @@
+{{
+ config(
+   materialized = 'incremental',
+   incremental_strategy = 'insert_overwrite',
+   partition_by = {
+     'field': 'GCS_loaded_at', 
+     'data_type': 'timestamp',
+     'granularity': 'day'
+   }
+ )
+}}
 
 with 
 
 final as (
     select
-        id as station_id,
+        md5('lille' || cast(id as string)) as station_fr_id,
+        cast(id as string) as station_id,
         nom as station_name,
         adresse as address,
         commune as city,
@@ -15,7 +27,12 @@ final as (
         y as lon,
         date_modification as last_reported_at,
         GCS_loaded_at
-    from {{source('lille_source', 'lille_all_tables')}}
+    from {{source('lille_source', 'raw_view_lille')}}
+    {% if is_incremental() %}
+    -- this filter will only be applied on an incremental run
+    -- (uses >= to include records arriving later on the same day as the last run of this model)
+    where GCS_loaded_at >= (select coalesce(max(GCS_loaded_at), '1900-01-01') from {{ this }})
+    {% endif %}
 )
 
 select 
