@@ -32,11 +32,13 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   my_velib_dbt_project:
     # Config indicated by + and applies to all files under models/staging/
-    raw_data:
+    raw_views:
       +materialized: view
     staging:
       +materialized: table
+    stations_availability:
+      +materialized: view
     stations_properties:
       +materialized: table
-    models:
+    marts:
       +materialized: table
