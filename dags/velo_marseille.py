@@ -14,8 +14,8 @@ from google.api_core.exceptions import NotFound
 import pandas as pd
 
 # Dag name
-DAG_ID = "Station_bordeaux"
-blob_name = 'bordeaux_data'
+DAG_ID = "Station_marseille"
+blob_name = 'marseille_data'
 var_bucket = Variable.get('BUCKET_NAME')
 var_project = Variable.get('PROJECT_ID')
 
@@ -29,7 +29,7 @@ current_timestamp_str = time.strftime("%Y%m%d_%H%M%S", current_time_struct)
 dag = DAG(
     DAG_ID,
     default_args={"retries": 1},
-    tags=["bordeaux"],
+    tags=["marseille"],
     start_date=datetime(2023, 4, 26),
     catchup=False,
 )
@@ -44,38 +44,37 @@ def transform_data(ti):
         raise ValueError("No data found from extract_data_task")
 
     station_dic = {
-        'lon': [],
-        'lat': [],
-        "insee": [],
-        "commune": [],
-        "gml_id": [],
-        "gid": [],
-        "ident": [],
-        "type": [],
-        "nom": [],
-        "etat": [],
-        "nbplaces": [],
-        "nbvelos": [],
-        "nbelec": [],
-        "nbclassiq": [],
-        "cdate": [],
-        "mdate": [],
-        "code_commune": []
+        "station_id": [],
+        "nom_division": [],
+        "name": [],
+        "capacity": [],
+        "is_valet_station": [],
+        "num_bikes_available": [],
+        "num_docks_available": [],
+        "is_installed": [],
+        "is_renting": [],
+        "is_returning": [],
+        "lon": [],
+        "lat": [],
+        "last_reported_tr": [],
+        "is_virtual_station": [],
+        "message_velo": [],
+        "message_dock_dispo": []
     }
 
     dic_keys = list(station_dic.keys())
 
-    print(f'🛠️ extracting Bordeaux JSON data...')
+    print(f'🛠️ extracting Marseille JSON data...')
     stations = data
     for station in stations:
         for key in dic_keys:
             if key in station:
                 station_dic[key].append(station.get(key))
             else:
-                sub_json = station.get('geo_point_2d', {})
+                sub_json = station.get('point_geo', {})
                 station_dic[key].append(sub_json.get(key))
 
-    print(f'✅ Bordeaux stations JSON data extracted')
+    print(f'✅ Marseille stations JSON data extracted')
     return station_dic
 
 def load_data_to_dataframe_to_csv_to_bucket(ti):
@@ -151,9 +150,9 @@ def load_data_gs_bigquery():
 # Task to get data from given HTTP end point
 extract_data_task = HttpOperator(
     task_id="extract_data_task",
-    http_conn_id="http_conn_id_velo_bordeaux",
+    http_conn_id="http_conn_id_velo_marseille",
     method="GET",
-    endpoint="/api/explore/v2.1/catalog/datasets/ci_vcub_p/exports/json?lang=fr&timezone=Europe/Berlin",
+    endpoint="/api/explore/v2.1/catalog/datasets/gbfs-extract-station-information/exports/json?lang=fr&timezone=Europe/Berlin",
     response_filter = lambda response : json.loads(response.text),
     dag=dag
 )

@@ -14,8 +14,8 @@ from google.api_core.exceptions import NotFound
 import pandas as pd
 
 # Dag name
-DAG_ID = "Station_bordeaux"
-blob_name = 'bordeaux_data'
+DAG_ID = "Station_paris"
+blob_name = 'paris_data'
 var_bucket = Variable.get('BUCKET_NAME')
 var_project = Variable.get('PROJECT_ID')
 
@@ -29,53 +29,67 @@ current_timestamp_str = time.strftime("%Y%m%d_%H%M%S", current_time_struct)
 dag = DAG(
     DAG_ID,
     default_args={"retries": 1},
-    tags=["bordeaux"],
+    tags=["paris"],
     start_date=datetime(2023, 4, 26),
     catchup=False,
 )
 
+
 def transform_data(ti):
     """
-    Extract needed fields from JSON response for Bordeaux stations.
+    Extract needed fields from JSON response for Paris stations.
     Returns a dictionary.
     """
-    data = ti.xcom_pull(task_ids='extract_data_task')
-    if not data:
-        raise ValueError("No data found from extract_data_task")
+    data_status = ti.xcom_pull(task_ids='extract_data_status_task')
+    data_informations =ti.xcom_pull(task_ids='extract_data_information_task')
+    if not data_status:
+        raise ValueError("No data found from extract_data_status_task")
+    if not data_informations:
+        raise ValueError("No data found from extract_data_information_task")
 
+    data_status = data_status['data']['stations']
+    data_informations = data_informations['data']['stations']
+    # Merge the two JSON responses based on station_id
+    merged_data = []
+    for status in data_status:
+        for info in data_informations:
+            if status['station_id'] == info['station_id']:
+                merged_station = {**status, **info}
+                merged_data.append(merged_station)
+    data_stations = merged_data
+    
+    print(data_stations[0])
+    print(f'🛠️ extracting Paris JSON data...')
+        
     station_dic = {
-        'lon': [],
+        'station_id': [],
+        'numBikesAvailable': [],
+        'mechanical': [],
+        'ebike': [],
+        'numDocksAvailable': [],
+        'is_installed': [],  
+        'is_returning': [],
+        'is_renting': [],
+        'last_reported': [],
+        'stationCode': [],  
+        'name': [],
         'lat': [],
-        "insee": [],
-        "commune": [],
-        "gml_id": [],
-        "gid": [],
-        "ident": [],
-        "type": [],
-        "nom": [],
-        "etat": [],
-        "nbplaces": [],
-        "nbvelos": [],
-        "nbelec": [],
-        "nbclassiq": [],
-        "cdate": [],
-        "mdate": [],
-        "code_commune": []
+        'lon': [],
     }
-
+    
+    print(station_dic)
+    print(f'🛠️ extracting Paris JSON data...')
     dic_keys = list(station_dic.keys())
-
-    print(f'🛠️ extracting Bordeaux JSON data...')
-    stations = data
+    stations = data_stations
     for station in stations:
         for key in dic_keys:
-            if key in station:
-                station_dic[key].append(station.get(key))
-            else:
-                sub_json = station.get('geo_point_2d', {})
-                station_dic[key].append(sub_json.get(key))
-
-    print(f'✅ Bordeaux stations JSON data extracted')
+            if key == 'mechanical':
+                station_dic[key].append(station['num_bikes_available_types'][0]['mechanical'])
+            elif key == 'ebike':
+                station_dic[key].append(station['num_bikes_available_types'][1]['ebike'])
+            else: 
+                station_dic[key].append(station[key])
+    print(f'✅ Paris stations JSON data extracted')
     return station_dic
 
 def load_data_to_dataframe_to_csv_to_bucket(ti):
@@ -94,7 +108,6 @@ def load_data_to_dataframe_to_csv_to_bucket(ti):
     
     
     station_dic = ti.xcom_pull(task_ids='transform_data_task')
-    # df = ti.xcom_pull(task_ids='load_data_to_dataframe')
     if not station_dic:
         raise ValueError("No data found from transform_data_task task")
 
@@ -149,11 +162,21 @@ def load_data_gs_bigquery():
     print(f'✅ Loaded {load_job.output_rows} rows into {var_project}:{blob_name}.{table_id}.') 
 
 # Task to get data from given HTTP end point
-extract_data_task = HttpOperator(
-    task_id="extract_data_task",
-    http_conn_id="http_conn_id_velo_bordeaux",
+extract_data_status_task = HttpOperator(
+    task_id="extract_data_status_task",
+    http_conn_id="http_conn_id_velo_paris",
     method="GET",
-    endpoint="/api/explore/v2.1/catalog/datasets/ci_vcub_p/exports/json?lang=fr&timezone=Europe/Berlin",
+    endpoint="/opendata/Velib_Metropole/station_status.json",
+    response_filter = lambda response : json.loads(response.text),
+    dag=dag
+)
+
+# Task to get data from given HTTP end point
+extract_data_information_task = HttpOperator(
+    task_id="extract_data_information_task",
+    http_conn_id="http_conn_id_velo_paris",
+    method="GET",
+    endpoint="/opendata/Velib_Metropole/station_information.json",
     response_filter = lambda response : json.loads(response.text),
     dag=dag
 )
@@ -177,5 +200,5 @@ load_data_to_bq = PythonOperator(
 
 
 # Task dependency set
-extract_data_task >> transform_data_task >> load_data_bucket_task >> load_data_to_bq
+[extract_data_status_task, extract_data_information_task] >> transform_data_task >> load_data_bucket_task >> load_data_to_bq
 
