@@ -5,7 +5,8 @@
 test.json
 __pycache__/
 /__pycache__
-/logs
+/logs/
+/dags/europe-west9-dev-composer-e-aeaa3dd5-bucket/
 logs/
 examples.py
 .vscode
