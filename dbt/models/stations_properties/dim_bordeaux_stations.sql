@@ -8,13 +8,14 @@ bordeaux_stations as (
 
 final as (
     select
+        station_fr_id,
         station_id,
         station_name,
         lat,
         lon,
-        null as station_address,
+        cast(null as string) as station_address,
         city as station_city,
-        null as station_district,
+        cast(null as string) as station_district,
         -- boolean indicating if the station is currently on service
         state = 'CONNECTEE' as is_active,
         available_docks_count + m_bikes_count + e_bikes_count as total_docks_count

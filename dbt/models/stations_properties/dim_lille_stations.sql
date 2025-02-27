@@ -8,13 +8,14 @@ lille_stations as (
 
 final as (
     select
+        station_fr_id,
         station_id,
         station_name,
         lat,
         lon,
         address as station_address,
         city as station_city,
-        null as station_district,
+        cast(null as string) as station_district,
         -- boolean indicating if the station is currently on service
         station_state = 'EN SERVICE' as is_active,
 
