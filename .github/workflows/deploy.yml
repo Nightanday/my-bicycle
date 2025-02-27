@@ -20,7 +20,7 @@ jobs:
       - name: Setup Google Cloud SDK
         uses: 'google-github-actions/setup-gcloud@v1'
         with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          project_id: ${{ secrets.GCP_KEY.project_id }}
 
       - name: Upload DAGs to GCP Bucket
         run: |
