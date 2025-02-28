@@ -17,9 +17,9 @@ final as (
     select
         md5('paris' || cast(station_id as string)) as station_fr_id,
         cast(station_id as string) as station_id,
-        mechanical as m_bikes_count,
-        ebike as e_bikes_count,
-        numDocksAvailable as available_docks_count,
+        coalesce(mechanical, 0) as m_bikes_count,
+        coalesce(ebike, 0) as e_bikes_count,
+        coalesce(numDocksAvailable, 0) as available_docks_count,
         cast(is_installed as bool) as is_installed,
         cast(is_renting as bool) as is_renting,
         cast(is_returning as bool) as is_returning,
