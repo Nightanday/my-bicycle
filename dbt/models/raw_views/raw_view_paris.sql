@@ -1,5 +1,5 @@
 WITH final AS (
-  SELECT * FROM `fleet-petal-448410-u6.paris_data.paris_data_*`
+  SELECT * FROM `my-bicycle-project-452309.paris_data.paris_data_*`
 )
 
 SELECT * FROM final
