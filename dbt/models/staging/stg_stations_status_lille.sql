@@ -25,8 +25,8 @@ final as (
         coalesce(nb_velos_dispo, 0) as m_bikes_count,
         0 as e_bikes_count,
         etat_connexion as connexion_state,
-        x as lat,
-        y as lon,
+        y as lat,
+        x as lon,
         date_modification as last_reported_at,
         GCS_loaded_at
     from {{source('lille_source', 'raw_view_lille')}}
