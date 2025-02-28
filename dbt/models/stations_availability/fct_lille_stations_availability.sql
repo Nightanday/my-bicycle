@@ -9,7 +9,7 @@ final as (
         station_fr_id,
         station_id,
         m_bikes_count,
-        null as e_bikes_count,
+        0 as e_bikes_count,
         m_bikes_count as bikes_count,
         available_docks_count,
         last_reported_at,

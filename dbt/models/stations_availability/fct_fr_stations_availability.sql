@@ -1,8 +1,8 @@
 with 
 
 fr_stations as (
-    --select 'paris' as service, * from {{ ref('fct_paris_stations_availability') }}
-    --union all
+    select 'paris' as service, * from {{ ref('fct_paris_stations_availability') }}
+    union all
     select 'lille' as service, * from {{ ref('fct_lille_stations_availability') }}
     union all
     select 'marseille' as service, * from {{ ref('fct_marseille_stations_availability') }}
