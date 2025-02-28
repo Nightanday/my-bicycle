@@ -32,6 +32,7 @@ dag = DAG(
     tags=["lille"],
     start_date=datetime(2023, 4, 26),
     catchup=False,
+    schedule_interval = '0 * * * *'
 )
 
 def transform_data(ti):
