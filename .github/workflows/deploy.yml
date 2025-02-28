@@ -24,5 +24,6 @@ jobs:
 
       - name: Upload DAGs to GCP Bucket
         run: |
-          gsutil -m cp -r dags/* gs://my-bicycle-bucket/dags
           gsutil -m cp -r dags/* gs://europe-west9-my-bicycle-pro-142edb04-bucket/dags
+          gsutil -m cp -r dags/* gs://my-bicycle-bucket/dags
+          
