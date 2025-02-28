@@ -8,11 +8,12 @@ marseille_stations as (
 
 final as (
     select
+        station_fr_id,
         station_id,
         station_name,
         lat,
         lon,
-        null as station_address,
+        cast(null as string) as station_address,
         'Marseille' as station_city,
         district as station_district,
         -- boolean indicating if the station is currently working for renting and returning bikes
