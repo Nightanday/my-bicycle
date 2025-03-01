@@ -32,7 +32,7 @@ dag = DAG(
     tags=["marseille"],
     start_date=datetime(2023, 4, 26),
     catchup=False,
-    schedule_interval = '0 * * * *'
+    schedule_interval = '30 * * * *'
 )
 
 def transform_data(ti):

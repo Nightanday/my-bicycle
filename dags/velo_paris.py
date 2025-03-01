@@ -32,7 +32,7 @@ dag = DAG(
     tags=["paris"],
     start_date=datetime(2023, 4, 26),
     catchup=False,
-    schedule_interval = '0 * * * *'
+    schedule_interval = '40 * * * *'
 )
 
 
