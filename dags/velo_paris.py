@@ -124,11 +124,11 @@ def load_data_to_dataframe_to_csv_to_bucket(ti):
 
 def load_data_gs_bigquery():
     """
-    function to load all the csv of the day from a bucket folder to big query
+    function to load the csv from a bucket folder to big query
     here the GCS bucket folder take the same name of the Big Query Dataset
     """
-
-    gcs_uri = f'gs://{var_bucket}/{blob_name}/{blob_name}_{current_date_str}/*.csv'
+    blob_full_name = f'{blob_name}/{blob_name}_{current_date_str}/{blob_name}_{current_timestamp_str}.csv'
+    gcs_uri = f'gs://{var_bucket}/{blob_full_name}'
     
     # Initialize a BigQuery client
     client = bigquery.Client(Variable.get('PROJECT_ID'))
