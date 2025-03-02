@@ -14,7 +14,7 @@ with
 
 final as (
     select
-        md5('bordeaux' || cast(gid as string)) as station_fr_id,
+        to_hex(md5('bordeaux' || cast(gid as string))) as station_fr_id,
         lon,
         lat,
         insee as insee_code,

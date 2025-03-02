@@ -15,7 +15,7 @@ with
 
 final as (
     select
-        md5('paris' || cast(station_id as string)) as station_fr_id,
+        to_hex(md5('paris' || cast(station_id as string))) as station_fr_id,
         cast(station_id as string) as station_id,
         coalesce(mechanical, 0) as m_bikes_count,
         coalesce(ebike, 0) as e_bikes_count,
