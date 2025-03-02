@@ -41,6 +41,14 @@ fr_stations_properties as (
         is_active = true
 ),
 
+fr_stations_locations as (
+    select
+        *
+    from
+        {{ ref('dim_fr_stations_locations') }}
+),
+
+
 final as (
     select 
         p.station_fr_id,
@@ -49,15 +57,18 @@ final as (
         coalesce(bikes_count, 0) bikes_count,
         coalesce(available_docks_count, 0) available_docks_count,
         date,
-        hour,
+        cast(hour as int64) as hour,
         service,
-        lat,
-        lon,
+        p.lat,
+        p.lon,
         total_docks_count,
         station_name,
         station_city,
         station_address,
         station_district,
+        GMAP_address,
+        GMAP_city,
+        GMAP_postal_code,
         case 
             when coalesce(bikes_count,0) = 0 then 'No availability'
             when coalesce(bikes_count,0) <= 3 then 'Low availability'
@@ -87,6 +98,9 @@ final as (
     left join
         fr_stations_availability as a
         on p.station_fr_id = a.station_fr_id
+    left join 
+        fr_stations_locations as l 
+        on p.station_fr_id = l.station_fr_id
 )
 
 select * from final

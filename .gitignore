@@ -13,4 +13,5 @@ examples.py
 api_fetch/.python-version
 target/
 dbt_packages/
+stations_lat_lon.csv
 

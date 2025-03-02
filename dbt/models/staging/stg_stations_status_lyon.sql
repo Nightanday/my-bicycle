@@ -14,7 +14,7 @@ with
 
 final as (
     select
-        md5('lyon' || cast(gid as string)) as station_fr_id,
+        to_hex(md5('lyon' || cast(gid as string))) as station_fr_id,
         cast(gid as string) as station_id,
         address,
         address_jcd,
