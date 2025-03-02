@@ -33,7 +33,7 @@ final as (
     {% if is_incremental() %}
     -- this filter will only be applied on an incremental run
     -- (uses >= to include records arriving later on the same day as the last run of this model)
-    where GCS_loaded_at >= (select coalesce(max(GCS_loaded_at), '1900-01-01') from {{ this }})
+    where date(GCS_loaded_at) >= (select coalesce(max(date(GCS_loaded_at)), '1900-01-01') from {{ this }})
     {% endif %}
 )
 
