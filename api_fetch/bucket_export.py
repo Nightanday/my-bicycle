@@ -64,7 +64,7 @@ def load_csv_to_bigquery(
         client.get_dataset(dataset_ref)
     except NotFound:
         dataset = bigquery.Dataset(dataset_ref)
-        dataset.location = "EU"  # Vous pouvez spécifier une autre région si nécessaire
+        dataset.location = "EU"  
         dataset = client.create_dataset(dataset)
         print(f"dataset '{data_folder}' has been created")
 
